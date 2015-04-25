@@ -7,9 +7,10 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.example.felix.my_9gag.util.BitmapUtils;
-import com.example.felix.my_9gag.util.Blur;
 import com.nineoldandroids.view.ViewHelper;
+
+import felixzhang.project.my_douban.util.BitmapUtils;
+import felixzhang.project.my_douban.util.Blur;
 
 
 /**

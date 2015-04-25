@@ -32,8 +32,8 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.felix.my_9gag.R;
-import com.example.felix.my_9gag.util.VersionUtils;
+import felixzhang.project.my_douban.R;
+import felixzhang.project.my_douban.util.VersionUtils;
 
 
 /**

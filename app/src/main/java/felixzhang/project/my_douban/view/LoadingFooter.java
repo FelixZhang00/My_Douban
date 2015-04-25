@@ -5,9 +5,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
-import com.example.felix.my_9gag.R;
-import com.example.felix.my_9gag.view.titanic.Titanic;
-import com.example.felix.my_9gag.view.titanic.TitanicTextView;
+import felixzhang.project.my_douban.R;
+import felixzhang.project.my_douban.view.titanic.Titanic;
+import felixzhang.project.my_douban.view.titanic.TitanicTextView;
 
 
 /**

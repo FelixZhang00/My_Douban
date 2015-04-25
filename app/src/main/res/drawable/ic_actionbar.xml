@@ -2,7 +2,7 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:drawable="@drawable/icon"
+        android:drawable="@drawable/app_icon"
         android:left="10dp" />
 
 </layer-list>
