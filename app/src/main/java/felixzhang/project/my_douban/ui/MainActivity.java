@@ -1,9 +1,11 @@
-package felixzhang.project.my_douban;
+package felixzhang.project.my_douban.ui;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import felixzhang.project.my_douban.R;
 
 
 public class MainActivity extends ActionBarActivity {
