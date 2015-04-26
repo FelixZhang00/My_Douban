@@ -1,7 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="match_parent"
+              android:background="@drawable/main_bg"
+              android:orientation="vertical"
+    >
+
+
+    <EditText
+        android:id="@+id/et_user_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/et_horizontal_margin"
+        android:layout_marginRight="@dimen/et_horizontal_margin"
+        android:layout_marginTop="@dimen/abc_action_bar_default_height_material"
+        android:hint="@string/email"
+        android:paddingLeft="10dp"
+        >
+
+        <requestFocus/>
+    </EditText>
+
+    <EditText
+        android:id="@+id/et_user_pwd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/et_horizontal_margin"
+        android:layout_marginRight="@dimen/et_horizontal_margin"
+        android:layout_marginTop="@dimen/abc_action_bar_default_height_material"
+        android:hint="@string/password"
+        />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="@dimen/et_horizontal_margin"
+        android:layout_marginRight="@dimen/et_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:background="@drawable/login_button_bg_selector"
+        android:text="@string/login"
+        android:textColor="@color/white"
+        android:textSize="22sp"
+        />
+
 
 </LinearLayout>
