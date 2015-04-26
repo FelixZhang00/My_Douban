@@ -37,6 +37,7 @@ public class BaseActivity extends FragmentActivity {
         mActionBarTitle = (ShimmerTextView) view.findViewById(R.id.tv_shimmer);
         new Shimmer().start(mActionBarTitle);
         actionBar.setCustomView(view);
+        
     }
 
     public void setTitle(int resId) {
@@ -46,6 +47,8 @@ public class BaseActivity extends FragmentActivity {
     public void setTitle(CharSequence text) {
         mActionBarTitle.setText(text);
     }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -60,6 +63,7 @@ public class BaseActivity extends FragmentActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
 
     @Override
     public void onDestroy() {
