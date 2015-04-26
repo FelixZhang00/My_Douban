@@ -8,7 +8,7 @@ import felixzhang.project.my_douban.R;
  * Created by felix on 15/4/26.
  */
 public class LoginActivity extends BaseActivity {
-
+//    UMSocialService mController = UMServiceFactory.getUMSocialService("com.umeng.share");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

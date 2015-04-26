@@ -5,17 +5,6 @@
     <string name="captchaurl">http://www.douban.com/misc/captcha?id=</string>
 
 
-    <!--这是我自己的-->
-    <string name="douban_apiKey">082e587080482c44188b095180d884cc</string>
-    <string name="douban_secret">9710e6749a71c153</string>
-
-    <string name="douban_appname">Demo_my_douban</string>
-    <!-- 用户授权完成后的回调地址，应用需要通过此回调地址获得用户的授权结果。此地址必须与在应用注册时填写的回调地址一致。-->
-    <string name="redirect_uri">http://douban.com/</string>
-
-    <string name="auth2_uri">https://www.douban.com/service/auth2/auth</string>
-
-
     <string name="newbookurl">http://book.douban.com/latest?icn=index-latestbook-all</string>
     <string name="detailbookurl">http://api.douban.com/book/subject/isbn/</string>
     <string name="detailbookidurl">http://api.douban.com/book/subject/</string>
