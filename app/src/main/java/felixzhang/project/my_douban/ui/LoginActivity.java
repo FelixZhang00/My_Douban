@@ -31,6 +31,7 @@ public class LoginActivity extends BaseActivity {
         setContentView(R.layout.login_webview);
         actionBar.setIcon(R.drawable.ic_actionbar);
 
+
         mWebView = (WebView) findViewById(R.id.webview);
         mProgressBar = (ProgressBar) findViewById(R.id.progressbar);
 
