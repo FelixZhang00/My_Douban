@@ -19,9 +19,11 @@ public class DoubanApi {
     // 用户授权完成后的回调地址，应用需要通过此回调地址获得用户的授权结果。
     // 此地址必须与在应用注册时填写的回调地址一致.
     //一个字符都不能差
-    public static final String redirect_uri = "http://douban.com/";
+    public static final String redirect_uri = "https://www.example.com/back/";
     public static final String auth2_uri = "https://www.douban.com/service/auth2/auth";
     public static final String response_type_code = "code";
 
+    public static final String auth2_uri2 = "https://www.douban.com/service/auth2/token";
+    public static final String grant_type="authorization_code";
 
 }

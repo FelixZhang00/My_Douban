@@ -27,7 +27,7 @@ public class SplashActivity extends Activity {
 
         // give a anim ,than go into other Activity
         AlphaAnimation anim = new AlphaAnimation(1.0f, 0.6f);
-        anim.setDuration(1200);
+        anim.setDuration(DEFAULT_ANIM_DELAY);
         mRl.startAnimation(anim);
 
         // using handler duration some time , than exec task.
