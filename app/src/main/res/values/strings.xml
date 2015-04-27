@@ -7,7 +7,10 @@
     <string name="douban">豆瓣客户端</string>
     <string name="login">登录</string>
     <string name="menu_item_clearuser">登出</string>
-
+    <string name="login_error">登录失败</string>
+    <string name="login_success">登录成功</string>
+    
+    
     <string name="myinfo">我的资料</string>
     <string name="myread">我读..</string>
     <string name="mylook">我看..</string>

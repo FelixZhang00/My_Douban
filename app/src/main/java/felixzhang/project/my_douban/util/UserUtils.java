@@ -17,10 +17,8 @@ public class UserUtils {
      */
     public static boolean isUserAuthoroized() {
         SharedPreferences sp = MyApp.getContext().getSharedPreferences("config", Context.MODE_PRIVATE);
-        String tokenaccess = sp.getString("tokenaccess", null);
-        String tokensecret = sp.getString("tokensecret", null);
-        if (tokenaccess == null || tokensecret == null
-                || "".equals(tokenaccess)) {
+        String access_token = sp.getString("access_token", null);
+        if (access_token == null || "".equals(access_token)) {
             return false;
         } else {
             return true;

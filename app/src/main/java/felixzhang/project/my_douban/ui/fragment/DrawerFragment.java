@@ -47,4 +47,10 @@ public class DrawerFragment extends BaseFragment {
         });
         return contentView;
     }
+
+
+    @Override
+    public void loadData() {
+
+    }
 }

@@ -15,4 +15,6 @@
     <color name="holo_orange_light">#33ffbb33</color>
     <color name="holo_purple_light">#33aa66cc</color>
 
+    <color name="text_grey">#8e8e8e</color>
+
 </resources>

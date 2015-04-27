@@ -15,6 +15,7 @@ public abstract class BaseFragment extends Fragment {
 
     private static final String TAG = "BaseFragment";
 
+    public abstract void loadData();
     @Override
     public void onDestroy() {
         Log.i(TAG, "BaseFragment onDestroy");

@@ -2,11 +2,13 @@ package felixzhang.project.my_douban.ui;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import felixzhang.project.my_douban.R;
 import felixzhang.project.my_douban.engine.DoubanFetcher;
@@ -49,13 +51,13 @@ public class LoginActivity extends BaseActivity {
                 Logger.i(TAG, "url = " + url);
 
                 int index_code = url.indexOf("?code=");
-                if (index_code == -1) {     //用户点击
-                    finish();
+                if (index_code == -1) {
+                    Toast.makeText(LoginActivity.this, getString(R.string.login_error), Toast.LENGTH_SHORT).show();
                 } else {
-                    String code = url.substring(index_code+6);
+                    String code = url.substring(index_code + 6);
                     Logger.i(TAG, " code=" + code);
-                    mFetcher.login(code);
-                    leap();
+
+                    new FetcherTask().execute(code);
                 }
 
                 //拦截在当前url基础上加载的新url，
@@ -78,16 +80,46 @@ public class LoginActivity extends BaseActivity {
             }
         });
 
-
         mWebView.loadUrl(url);
 
-
     }
+
 
     private void leap() {
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    class FetcherTask extends AsyncTask<String, Void, Boolean> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            mProgressBar.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            String code = params[0];
+            boolean isLoginSuccess = mFetcher.login(code);
+            Logger.i(TAG, "isLoginSuccess = " + isLoginSuccess);
+            return isLoginSuccess;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean isLoginSuccess) {
+            super.onPostExecute(isLoginSuccess);
+            mProgressBar.setVisibility(View.GONE);
+
+            if (isLoginSuccess) {
+                Toast.makeText(LoginActivity.this, getString(R.string.login_success), Toast.LENGTH_SHORT).show();
+                leap();
+            } else {
+                Toast.makeText(LoginActivity.this, getString(R.string.login_error), Toast.LENGTH_SHORT).show();
+            }
+
+        }
     }
 
 

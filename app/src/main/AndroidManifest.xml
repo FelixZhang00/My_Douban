@@ -36,6 +36,11 @@
             android:theme="@style/AppTheme"
             >
         </activity>
+        <activity android:name=".ui.BookDetailActivity"
+
+            >
+
+        </activity>
     </application>
 
 </manifest>

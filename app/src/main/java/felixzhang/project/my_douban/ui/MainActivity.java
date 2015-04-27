@@ -17,6 +17,7 @@ import felixzhang.project.my_douban.R;
 import felixzhang.project.my_douban.model.Category;
 import felixzhang.project.my_douban.ui.fragment.BaseFragment;
 import felixzhang.project.my_douban.ui.fragment.DrawerFragment;
+import felixzhang.project.my_douban.ui.fragment.NewBookFragment;
 import felixzhang.project.my_douban.view.BlurFoldingActionBarToggle;
 import felixzhang.project.my_douban.view.FoldingDrawerLayout;
 
@@ -33,7 +34,7 @@ public class MainActivity extends BaseActivity {
 
     private BlurFoldingActionBarToggle mDrawerToggle;
 
-//    private FeedsFragment mContentFragment;
+    private BaseFragment mContentFragment;
 
     private Category mCategory;
 
@@ -67,7 +68,7 @@ public class MainActivity extends BaseActivity {
         mDrawerToggle.setBlurImageAndView(blurImage, contentLayout);
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-        setCategory(Category.hot);
+        setCategory(Category.newbook);
         replaceFragment(R.id.left_drawer, new DrawerFragment());
     }
 
@@ -102,7 +103,7 @@ public class MainActivity extends BaseActivity {
         }
         switch (item.getItemId()) {
             case R.id.action_refresh: //TODO
-//                mContentFragment.loadFirstAndScrollToTop();
+                mContentFragment.loadData();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -116,6 +117,11 @@ public class MainActivity extends BaseActivity {
         }
         mCategory = category;
         setTitle(mCategory.getDisplayName());
+
+        if (category.equals(Category.newbook)) {    //进入新书栏目
+            mContentFragment = NewBookFragment.newInstance();
+            replaceFragment(R.id.content_frame, mContentFragment);
+        }
 
 //        mContentFragment = FeedsFragment.newInstance(category);
 //        replaceFragment(R.id.content_frame, mContentFragment);
