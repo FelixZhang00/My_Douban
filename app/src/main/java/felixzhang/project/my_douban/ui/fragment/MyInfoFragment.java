@@ -25,6 +25,7 @@ import felixzhang.project.my_douban.R;
 import felixzhang.project.my_douban.engine.DoubanFetcher;
 import felixzhang.project.my_douban.engine.ThumbnailDownLoader;
 import felixzhang.project.my_douban.model.User;
+import felixzhang.project.my_douban.util.RoundImage;
 
 /**
  * Created by felix on 15/4/28.
@@ -66,7 +67,8 @@ public class MyInfoFragment extends BaseFragment implements SwipeRefreshLayout.O
             public void onThumbnailDownloaded(ImageView imageview,
                                               Bitmap thumbnail) {
                 if (isVisible()) {
-                    imageview.setImageBitmap(thumbnail);
+                    Bitmap round = RoundImage.toRoundBitmap(thumbnail);
+                    imageview.setImageBitmap(round);
                 }
             }
 

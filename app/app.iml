@@ -100,9 +100,10 @@
     <orderEntry type="library" exported="" name="commons-httpclient-3.1" level="project" />
     <orderEntry type="library" exported="" name="universal-image-loader-1.9.1" level="project" />
     <orderEntry type="library" exported="" name="volley" level="project" />
+    <orderEntry type="library" exported="" name="circleimageview-1.2.2" level="project" />
     <orderEntry type="library" exported="" name="gdata-core-1.0" level="project" />
-    <orderEntry type="library" exported="" name="butterknife-5.0.0" level="project" />
     <orderEntry type="library" exported="" name="gdata-client-1.0" level="project" />
+    <orderEntry type="library" exported="" name="butterknife-5.0.0" level="project" />
     <orderEntry type="module" module-name="shimmer" exported="" />
   </component>
 </module>

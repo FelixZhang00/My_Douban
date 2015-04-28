@@ -36,6 +36,7 @@ dependencies {
     compile files('libs/gdata-core-1.0.jar')
     compile files('libs/oauth-1.3.jar')
     compile files('libs/commons-codec-1.3.jar')
+    compile 'de.hdodenhof:circleimageview:1.2.2'
 }
 
 android {
