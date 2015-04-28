@@ -5,33 +5,31 @@ package felixzhang.project.my_douban.model;
  */
 public class NewBook extends Book {
 
-	private String summary;
+    private String summary;
 
-	public NewBook() {
-		super();
-	}
+    public NewBook() {
+        super();
+    }
 
-	public NewBook(String title, String description, String summary,
-			String imgurl) {
-		super();
-		this.title = title;
-		this.description = description;
-		this.summary = summary;
-		this.imgurl = imgurl;
-	}
+    public NewBook(String title, String description, String summary,
+                   String imgurl, String id) {
+        super(title, description, 0, imgurl, id);
+        this.summary = summary;
+    }
 
-	public String getSummary() {
-		return summary;
-	}
+    public String getSummary() {
+        return summary;
+    }
 
-	public void setSummary(String summary) {
-		this.summary = summary;
-	}
+    public void setSummary(String summary) {
+        this.summary = summary;
+    }
 
-	@Override
-	public String toString() {
-		return "NewBook [title=" + title + ", description=" + description
-				+ ", summary=" + summary + ", imgurl=" + imgurl + "]";
-	}
+    @Override
+    public String toString() {
 
+        return super.toString() + "NewBook{" +
+                "summary='" + summary + '\'' +
+                '}';
+    }
 }

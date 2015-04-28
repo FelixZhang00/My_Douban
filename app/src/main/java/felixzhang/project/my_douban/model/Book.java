@@ -71,4 +71,14 @@ public class Book {
 		this.imgurl = img;
 	}
 
+	@Override
+	public String toString() {
+		return "Book{" +
+				"title='" + title + '\'' +
+				", description='" + description + '\'' +
+				", rating=" + rating +
+				", imgurl='" + imgurl + '\'' +
+				", id='" + id + '\'' +
+				'}';
+	}
 }

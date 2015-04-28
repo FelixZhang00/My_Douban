@@ -30,6 +30,7 @@ import felixzhang.project.my_douban.engine.ThumbnailDownLoader;
 import felixzhang.project.my_douban.engine.cacheload.ImageLoader;
 import felixzhang.project.my_douban.model.NewBook;
 import felixzhang.project.my_douban.ui.BookDetailActivity;
+import felixzhang.project.my_douban.util.Logger;
 
 
 /**
@@ -108,7 +109,7 @@ public class NewBookFragment extends BaseFragment implements SwipeRefreshLayout.
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), BookDetailActivity.class);
                 NewBook newBook=mNewBooks.get(position);
-
+                Logger.i(TAG,newBook.getId());
                 intent.putExtra(BookDetailActivity.BOOKID,newBook.getId());
                 getActivity().startActivity(intent);
             }
@@ -190,7 +191,7 @@ public class NewBookFragment extends BaseFragment implements SwipeRefreshLayout.
         @Override
         protected ArrayList<NewBook> doInBackground(Void... params) {
             try {
-                return (ArrayList<NewBook>) mFetcher.getNewBooks();
+                return (ArrayList<NewBook>) mFetcher.getNewBooks(getActivity());
             } catch (Exception e) {
                 e.printStackTrace();
             }

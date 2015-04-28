@@ -8,6 +8,9 @@ import android.widget.TextView;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import felixzhang.project.my_douban.R;
+import felixzhang.project.my_douban.dao.DBHelper;
+import felixzhang.project.my_douban.model.NewBook;
+import felixzhang.project.my_douban.util.Logger;
 
 
 /**
@@ -17,6 +20,7 @@ import felixzhang.project.my_douban.R;
 public class BookDetailActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener {
 
     public static final String BOOKID = "book_id";
+    private static final String TAG = "BookDetailActivity";
     @InjectView(R.id.swipe_container)
     SwipeRefreshLayout mSwipeLayout;
 
@@ -28,13 +32,14 @@ public class BookDetailActivity extends BaseActivity implements SwipeRefreshLayo
 
 
     private ProgressDialog mProgressDialog;
+    private DBHelper mDBHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.book_detail);
         ButterKnife.inject(this);
-
+        mDBHelper = new DBHelper(this);
 
         mProgressDialog = new ProgressDialog(this);  //ProgressDialog只在第一次打开此页面时启用
         mProgressDialog.setCancelable(false);
@@ -45,11 +50,14 @@ public class BookDetailActivity extends BaseActivity implements SwipeRefreshLayo
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
 
-
+        fillData();
     }
 
     private void fillData() {
-        String book_id = getIntent().getStringExtra("BOOKID");
+        String book_id = getIntent().getStringExtra(BOOKID);
+
+        NewBook newBook = mDBHelper.queryNewBook(book_id);
+        Logger.i(TAG, newBook.toString());
 
     }
 

@@ -36,6 +36,7 @@ import java.util.regex.Pattern;
 import felixzhang.project.my_douban.MyApp;
 import felixzhang.project.my_douban.R;
 import felixzhang.project.my_douban.api.DoubanApi;
+import felixzhang.project.my_douban.dao.DBHelper;
 import felixzhang.project.my_douban.model.NewBook;
 import felixzhang.project.my_douban.model.TokenBean;
 import felixzhang.project.my_douban.util.Logger;
@@ -174,8 +175,10 @@ public class DoubanFetcher {
     }
 
 
-    public List<NewBook> getNewBooks() throws Exception {
-        String newbookurl = MyApp.getContext().getResources().getString(
+    public List<NewBook> getNewBooks(Context context) throws Exception {
+        DBHelper dbHelper = new DBHelper(context);
+
+        String newbookurl = context.getResources().getString(
                 R.string.newbookurl);
         URL url = new URL(newbookurl);
 
@@ -232,6 +235,8 @@ public class DoubanFetcher {
 //                    parseRatingAndImg(newBook, detialurl);
 
                     newBooks.add(newBook);
+
+                    dbHelper.insertNewBook(newBook);
                 }
 
             }
