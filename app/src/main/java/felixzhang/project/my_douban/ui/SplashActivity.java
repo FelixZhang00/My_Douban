@@ -8,7 +8,6 @@ import android.view.animation.AlphaAnimation;
 import android.widget.RelativeLayout;
 
 import felixzhang.project.my_douban.R;
-import felixzhang.project.my_douban.util.UserUtils;
 
 /**
  * Created by felix on 15/4/26.
@@ -39,14 +38,15 @@ public class SplashActivity extends Activity {
 
         @Override
         public void run() {
-            Intent intent;
-            if (UserUtils.isUserAuthoroized()) {
-                intent = new Intent(SplashActivity.this,
-                        MainActivity.class);
-            } else {
-                intent = new Intent(SplashActivity.this,
-                        LoginActivity.class);
-            }
+            Intent intent = new Intent(SplashActivity.this,
+                    MainActivity.class);
+//            if (UserUtils.isUserAuthoroized()) {
+//                intent = new Intent(SplashActivity.this,
+//                        MainActivity.class);
+//            } else {
+//                intent = new Intent(SplashActivity.this,
+//                        LoginActivity.class);
+//            }
 
             startActivity(intent);
             finish();

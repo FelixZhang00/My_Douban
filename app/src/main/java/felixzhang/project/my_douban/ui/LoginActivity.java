@@ -1,6 +1,5 @@
 package felixzhang.project.my_douban.ui;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -86,8 +85,6 @@ public class LoginActivity extends BaseActivity {
 
 
     private void leap() {
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        startActivity(intent);
         finish();
     }
 
@@ -114,6 +111,7 @@ public class LoginActivity extends BaseActivity {
 
             if (isLoginSuccess) {
                 Toast.makeText(LoginActivity.this, getString(R.string.login_success), Toast.LENGTH_SHORT).show();
+                setResult(RESULT_OK);
                 leap();
             } else {
                 Toast.makeText(LoginActivity.this, getString(R.string.login_error), Toast.LENGTH_SHORT).show();

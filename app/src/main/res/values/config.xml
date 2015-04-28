@@ -9,4 +9,5 @@
     <string name="detailbookurl">http://api.douban.com/book/subject/isbn/</string>
     <string name="detailbookidurl">http://api.douban.com/book/subject/</string>
 
+    <string name="userurl_host">https://api.douban.com/v2/user/</string>
 </resources>

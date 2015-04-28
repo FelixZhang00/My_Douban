@@ -13,6 +13,8 @@ import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
  * Created by storm on 14-3-24.
  */
 public class MyApp extends Application {
+
+    public static final String PREFS_FILE="config";
     private static Context sContext;
 
     @Override

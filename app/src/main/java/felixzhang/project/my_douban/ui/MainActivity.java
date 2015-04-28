@@ -1,5 +1,6 @@
 package felixzhang.project.my_douban.ui;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -17,12 +18,18 @@ import felixzhang.project.my_douban.R;
 import felixzhang.project.my_douban.model.Category;
 import felixzhang.project.my_douban.ui.fragment.BaseFragment;
 import felixzhang.project.my_douban.ui.fragment.DrawerFragment;
+import felixzhang.project.my_douban.ui.fragment.MyInfoFragment;
 import felixzhang.project.my_douban.ui.fragment.NewBookFragment;
+import felixzhang.project.my_douban.util.Logger;
+import felixzhang.project.my_douban.util.UserUtils;
 import felixzhang.project.my_douban.view.BlurFoldingActionBarToggle;
 import felixzhang.project.my_douban.view.FoldingDrawerLayout;
 
 
 public class MainActivity extends BaseActivity {
+    public static final int LOGIN_REQUEST_CODE = 0;
+    private static final String TAG = "MainActivity";
+
     @InjectView(R.id.drawer_layout)
     FoldingDrawerLayout mDrawerLayout;
 
@@ -121,9 +128,60 @@ public class MainActivity extends BaseActivity {
         if (category.equals(Category.newbook)) {    //进入新书栏目
             mContentFragment = NewBookFragment.newInstance();
             replaceFragment(R.id.content_frame, mContentFragment);
+        } else if (category.equals(Category.myinfo)) {  //进入我的资料栏目
+            if (!shouldLogin()) {
+                mContentFragment = MyInfoFragment.newInstance();
+                replaceFragment(R.id.content_frame, mContentFragment);
+            } else {
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivityForResult(intent, LOGIN_REQUEST_CODE);
+            }
         }
 
 //        mContentFragment = FeedsFragment.newInstance(category);
 //        replaceFragment(R.id.content_frame, mContentFragment);
     }
+
+    /**
+     * 判断用户是否需要登录
+     */
+    private boolean shouldLogin() {
+        boolean userAuthoroized = UserUtils.isUserAuthoroized();
+        return !userAuthoroized;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == LOGIN_REQUEST_CODE) {
+
+            if (resultCode == RESULT_OK) {
+                Logger.i(TAG, "用户已登录");
+                mCategory = Category.myinfo;
+            } else {
+                mCategory = Category.newbook;
+            }
+            setCategoryForResult(mCategory);
+        }
+
+    }
+
+    private void setCategoryForResult(Category category) {
+        setTitle(mCategory.getDisplayName());
+
+        if (category.equals(Category.newbook)) {    //进入新书栏目
+            mContentFragment = NewBookFragment.newInstance();
+            replaceFragment(R.id.content_frame, mContentFragment);
+        } else if (category.equals(Category.myinfo)) {  //进入我的资料栏目
+            if (!shouldLogin()) {
+                mContentFragment = MyInfoFragment.newInstance();
+                replaceFragment(R.id.content_frame, mContentFragment);
+            } else {
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivityForResult(intent, LOGIN_REQUEST_CODE);
+            }
+        }
+    }
+
 }

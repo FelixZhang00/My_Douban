@@ -39,6 +39,7 @@ import felixzhang.project.my_douban.api.DoubanApi;
 import felixzhang.project.my_douban.dao.DBHelper;
 import felixzhang.project.my_douban.model.NewBook;
 import felixzhang.project.my_douban.model.TokenBean;
+import felixzhang.project.my_douban.model.User;
 import felixzhang.project.my_douban.util.Logger;
 
 /**
@@ -128,7 +129,7 @@ public class DoubanFetcher {
                 TokenBean tokenBean = gson.fromJson(result, TokenBean.class);
 
                 //保存数据到配置文件中
-                SharedPreferences sp = MyApp.getContext().getSharedPreferences("config",
+                SharedPreferences sp = MyApp.getContext().getSharedPreferences(MyApp.PREFS_FILE,
                         Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sp.edit();
                 editor.putString("access_token", tokenBean.getAccess_token());
@@ -172,6 +173,20 @@ public class DoubanFetcher {
                 .appendQueryParameter("response_type", DoubanApi.response_type_code)
                 .build().toString();
         return url;
+    }
+
+
+    /**
+     * 找用户的头像img的地址
+     * <p/>
+     * https://api.douban.com/v2/user/119013893?apikey=XXX
+     */
+    public String getUserPhotoUrl(String userID) throws IOException {
+        String url = MyApp.getContext().getString(R.string.userurl_host) + userID + "?apikey=" + DoubanApi.douban_apiKey;
+        String user_json = getUrl(url);
+        Gson gson = new Gson();
+        User user = gson.fromJson(user_json, User.class);
+        return user.getLarge_avatar();
     }
 
 
@@ -246,13 +261,14 @@ public class DoubanFetcher {
 
     }
 
+
     /**
      * 解析此ulr对应的json数据，从中获取评分信息和图片url
      */
     private void parseRatingAndImg(NewBook newBook, String detialurl) throws XmlPullParserException, IOException {
         String json = getUrl(detialurl);
         Gson gson = new Gson();
-        JsonTemp jsonTemp = gson.fromJson(json, JsonTemp.class);
+        JsonTempBook jsonTemp = gson.fromJson(json, JsonTempBook.class);
         newBook.setRating(Double.valueOf(jsonTemp.rating.average));
         newBook.setImgurl(jsonTemp.image);
     }
@@ -260,7 +276,7 @@ public class DoubanFetcher {
     /**
      * 为了解析json数据，临时定义的对象
      */
-    class JsonTemp {
+    class JsonTempBook {
 
         class Rating {
             String average;
@@ -268,7 +284,6 @@ public class DoubanFetcher {
 
         Rating rating;
         String image;
-
     }
 
 }
