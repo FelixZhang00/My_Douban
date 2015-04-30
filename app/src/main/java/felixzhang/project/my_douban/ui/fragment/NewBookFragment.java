@@ -15,10 +15,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+
+import com.nhaarman.listviewanimations.swinginadapters.AnimationAdapter;
 
 import java.util.ArrayList;
 
@@ -30,6 +33,7 @@ import felixzhang.project.my_douban.engine.ThumbnailDownLoader;
 import felixzhang.project.my_douban.engine.cacheload.ImageLoader;
 import felixzhang.project.my_douban.model.NewBook;
 import felixzhang.project.my_douban.ui.BookDetailActivity;
+import felixzhang.project.my_douban.ui.adapter.CardsAnimationAdapter;
 import felixzhang.project.my_douban.util.Logger;
 
 
@@ -45,6 +49,8 @@ public class NewBookFragment extends BaseFragment implements SwipeRefreshLayout.
     GridView mGridView;
 
     private MenuItem mRefreshItem;
+
+    private BaseAdapter mAdapter;
 
     private ProgressDialog mProgressDialog;
 
@@ -108,9 +114,9 @@ public class NewBookFragment extends BaseFragment implements SwipeRefreshLayout.
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), BookDetailActivity.class);
-                NewBook newBook=mNewBooks.get(position);
-                Logger.i(TAG,newBook.getId());
-                intent.putExtra(BookDetailActivity.BOOKID,newBook.getId());
+                NewBook newBook = mNewBooks.get(position);
+                Logger.i(TAG, newBook.getId());
+                intent.putExtra(BookDetailActivity.BOOKID, newBook.getId());
                 getActivity().startActivity(intent);
             }
         });
@@ -147,7 +153,10 @@ public class NewBookFragment extends BaseFragment implements SwipeRefreshLayout.
         if (getActivity() == null || mGridView == null) return;
 
         if (mNewBooks != null) {
-            mGridView.setAdapter(new NewBookAdapter(mNewBooks));
+            mAdapter = new NewBookAdapter(mNewBooks);
+            AnimationAdapter animationAdapter = new CardsAnimationAdapter(mAdapter);
+            animationAdapter.setAbsListView(mGridView);
+            mGridView.setAdapter(animationAdapter);
         } else {
             mGridView.setAdapter(null);
         }
