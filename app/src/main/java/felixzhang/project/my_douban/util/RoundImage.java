@@ -54,6 +54,7 @@ public class RoundImage {
 
         Bitmap output = Bitmap.createBitmap(width,
                 height, Bitmap.Config.ARGB_8888);
+
         Canvas canvas = new Canvas(output);
 
         final int color = 0xff424242;

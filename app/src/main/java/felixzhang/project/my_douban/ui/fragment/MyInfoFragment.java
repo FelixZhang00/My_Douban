@@ -2,7 +2,6 @@ package felixzhang.project.my_douban.ui.fragment;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -25,7 +24,6 @@ import felixzhang.project.my_douban.R;
 import felixzhang.project.my_douban.engine.DoubanFetcher;
 import felixzhang.project.my_douban.engine.ThumbnailDownLoader;
 import felixzhang.project.my_douban.model.User;
-import felixzhang.project.my_douban.util.RoundImage;
 
 /**
  * Created by felix on 15/4/28.
@@ -61,20 +59,21 @@ public class MyInfoFragment extends BaseFragment implements SwipeRefreshLayout.O
         mPrefs = getActivity().getSharedPreferences(MyApp.PREFS_FILE, Context.MODE_PRIVATE);
 
         mThumbnailDownLoader = new ThumbnailDownLoader<ImageView>(new Handler());
-        mThumbnailDownLoader.setListener(new ThumbnailDownLoader.Listener<ImageView>() {
 
-            @Override
-            public void onThumbnailDownloaded(ImageView imageview,
-                                              Bitmap thumbnail) {
-                if (isVisible()) {
-                    Bitmap round = RoundImage.toRoundBitmap(thumbnail);
-                    imageview.setImageBitmap(round);
-                }
-            }
-
-        });
-        mThumbnailDownLoader.start();
-        mThumbnailDownLoader.getLooper();
+//        mThumbnailDownLoader.setListener(new ThumbnailDownLoader.Listener<ImageView>() {
+//
+//            @Override
+//            public void onThumbnailDownloaded(ImageView imageview,
+//                                              Bitmap thumbnail) {
+//                if (isVisible()) {
+//                    Bitmap round = RoundImage.toRoundBitmap(thumbnail);
+//                    imageview.setImageBitmap(round);
+//                }
+//            }
+//
+//        });
+//        mThumbnailDownLoader.start();
+//        mThumbnailDownLoader.getLooper();
     }
 
     @Override
@@ -87,10 +86,13 @@ public class MyInfoFragment extends BaseFragment implements SwipeRefreshLayout.O
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
-
-
-        updateUI();
         return contentView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateUI();
     }
 
     private void updateUI() {
@@ -139,7 +141,11 @@ public class MyInfoFragment extends BaseFragment implements SwipeRefreshLayout.O
         @Override
         protected void onPostExecute(String imgurl) {
             super.onPostExecute(imgurl);
-            mThumbnailDownLoader.queueThumbnail(mUserPhoto, imgurl);
+
+//            mThumbnailDownLoader.queueThumbnail(mUserPhoto, imgurl);
+
+            mThumbnailDownLoader.setUserPhoto(mUserPhoto, imgurl);
+
             if (mSwipeLayout != null && mSwipeLayout.isRefreshing()) {
                 setRefreshing(false);
                 isFirstRefresh = true;

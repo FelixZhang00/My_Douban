@@ -1,6 +1,7 @@
 package felixzhang.project.my_douban.ui;
 
 import android.app.ActionBar;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.MenuItem;
@@ -13,6 +14,7 @@ import com.romainpiel.shimmer.Shimmer;
 import com.romainpiel.shimmer.ShimmerTextView;
 
 import felixzhang.project.my_douban.R;
+import felixzhang.project.my_douban.util.UserUtils;
 
 /**
  * Created by felix on 15/2/15.
@@ -37,7 +39,7 @@ public class BaseActivity extends FragmentActivity {
         mActionBarTitle = (ShimmerTextView) view.findViewById(R.id.tv_shimmer);
         new Shimmer().start(mActionBarTitle);
         actionBar.setCustomView(view);
-        
+
     }
 
     public void setTitle(int resId) {
@@ -49,7 +51,6 @@ public class BaseActivity extends FragmentActivity {
     }
 
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -59,6 +60,11 @@ public class BaseActivity extends FragmentActivity {
             case R.id.action_settings:
 //                startActivity(new Intent(this, PreferenceActivity.class));
                 return true;
+            case R.id.logout:
+                UserUtils.clearUser();
+                startActivity(new Intent(this,LoginActivity.class));
+                return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }

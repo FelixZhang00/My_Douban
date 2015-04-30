@@ -16,7 +16,7 @@ public class UserUtils {
      * @return
      */
     public static boolean isUserAuthoroized() {
-        SharedPreferences sp = MyApp.getContext().getSharedPreferences("config", Context.MODE_PRIVATE);
+        SharedPreferences sp = MyApp.getContext().getSharedPreferences(MyApp.PREFS_FILE, Context.MODE_PRIVATE);
         String access_token = sp.getString("access_token", null);
         if (access_token == null || "".equals(access_token)) {
             return false;
@@ -24,4 +24,16 @@ public class UserUtils {
             return true;
         }
     }
+
+    /**
+     * 清楚用户登录信息
+     */
+    public static void clearUser(){
+        SharedPreferences sp = MyApp.getContext().getSharedPreferences(MyApp.PREFS_FILE, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.clear().commit();
+    }
+
+
+
 }

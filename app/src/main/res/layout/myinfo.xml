@@ -37,6 +37,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:text="name"
+
                 />
         </LinearLayout>
     </ScrollView>
