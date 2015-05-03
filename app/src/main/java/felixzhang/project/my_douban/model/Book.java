@@ -95,18 +95,16 @@ public class Book extends BaseModel {
      */
     public static class BookRequestData {
         public ArrayList<Book> books;
-        public int count;
-        public int start;
-        public int total;
+        public String count;
+        public String start;
+        public String total;
 
         public int getTotal() {
             return total;
         }
     }
 
-//    public static Book fromCursor(Cursor cursor){
-//
-//    }
+
 
 
 }
