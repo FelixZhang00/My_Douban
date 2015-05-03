@@ -5,6 +5,8 @@ import android.content.Context;
 
 /**
  * Created by felix on 15/4/28.
+ *
+ * 参考 《Android编程权威指南》中第35章的做法
  */
 public abstract class DataLoader<D> extends AsyncTaskLoader<D> {
 

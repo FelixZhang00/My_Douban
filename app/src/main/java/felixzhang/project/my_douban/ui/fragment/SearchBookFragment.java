@@ -65,7 +65,6 @@ public class SearchBookFragment extends BaseFragment implements MainActivity.onD
         setHasOptionsMenu(true);
         mProgressDialog = new ProgressDialog(getActivity());
         mProgressDialog.setCancelable(false);
-        mProgressDialog.show();
     }
 
     @Override
@@ -128,15 +127,19 @@ public class SearchBookFragment extends BaseFragment implements MainActivity.onD
 
     private void loadData(String start) {
         Logger.i(TAG, "LOADDATE");
-        if ("0".equals(start)){
+        if ("0".equals(start)) {
             setRefreshing(true);
         }
 
         String query = PreferenceManager.getDefaultSharedPreferences(MyApp.getContext()).getString(MyApp.PREF_SEARCHQUERY, null);
+
         if (query != null) {
             String url = getActivity().getString(R.string.booksearch_host) + "?q=" + query.trim() + "&start=" + start + "&apikey=" + DoubanApi.douban_apiKey;
             executeRequest(new GsonRequest(url, Book.BookRequestData.class, responseListener(), errorListener()));
+        } else {  //没有输入搜索关键字的情况
+            setRefreshing(false);
         }
+
 
     }
 
@@ -235,7 +238,7 @@ public class SearchBookFragment extends BaseFragment implements MainActivity.onD
 
     private void setRefreshing(boolean refreshing) {
 
-        if (mRefreshItem == null||mProgressDialog==null) return;
+        if (mRefreshItem == null || mProgressDialog == null) return;
 
         if (refreshing) {
             mRefreshItem.setActionView(R.layout.actionbar_refresh_progress);

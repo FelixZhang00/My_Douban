@@ -60,4 +60,10 @@ public class Book extends BaseModel {
             return total;
         }
     }
+
+//    public static Book fromCursor(Cursor cursor){
+//
+//    }
+
+
 }

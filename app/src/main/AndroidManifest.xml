@@ -47,6 +47,15 @@
             >
 
         </activity>
+        <provider
+            android:authorities="felixzhang.project.my_douban.provider"
+            android:name=".dao.DataProvider"
+            android:exported="false"
+            >
+            <grant-uri-permission
+                android:pathPattern=".*"
+                />
+        </provider>
     </application>
 
 </manifest>

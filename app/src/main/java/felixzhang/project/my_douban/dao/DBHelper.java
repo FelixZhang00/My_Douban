@@ -28,6 +28,9 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String COLUMN_IMGURL = "imgurl";
     private static final String COLUMN_SUMMARY = "summary";
 
+
+    //为避免字段名重复，searched_books表的字段定义，采用封装的形式
+
     public DBHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
     }
@@ -44,6 +47,9 @@ public class DBHelper extends SQLiteOpenHelper {
                 "\t \"summary\" TEXT\n" +
                 ");";
         db.execSQL(create_book_sql);
+
+        //创建searched_books表
+        SearchedBookDataHelper.SearchedBookDBInfo.TABLE.create(db);
 
     }
 
@@ -87,8 +93,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
 
     /**
-     *
      * 根据bookid查询新书
+     *
      * @return
      */
     public NewBook queryNewBook(String bookID) {
