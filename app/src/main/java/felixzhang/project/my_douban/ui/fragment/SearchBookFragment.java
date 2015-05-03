@@ -1,5 +1,6 @@
 package felixzhang.project.my_douban.ui.fragment;
 
+import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.os.Build;
@@ -20,6 +21,7 @@ import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.android.volley.Response;
+import com.android.volley.toolbox.ImageLoader;
 
 import java.util.List;
 
@@ -29,13 +31,18 @@ import felixzhang.project.my_douban.MyApp;
 import felixzhang.project.my_douban.R;
 import felixzhang.project.my_douban.api.DoubanApi;
 import felixzhang.project.my_douban.engine.data.GsonRequest;
+import felixzhang.project.my_douban.engine.data.LruImageCache;
 import felixzhang.project.my_douban.model.Book;
+import felixzhang.project.my_douban.ui.MainActivity;
+import felixzhang.project.my_douban.util.CommUtils;
 import felixzhang.project.my_douban.util.Logger;
+import felixzhang.project.my_douban.util.StringUtil;
+import felixzhang.project.my_douban.util.VolleyUtil;
 
 /**
  * Created by felix on 15/5/3.
  */
-public class SearchBookFragment extends BaseFragment {
+public class SearchBookFragment extends BaseFragment implements MainActivity.onDrawerListener {
 
     private final String TAG = getClass().getSimpleName();
 
@@ -43,6 +50,10 @@ public class SearchBookFragment extends BaseFragment {
     ListView mListView;
 
     private MenuItem mRefreshItem;
+    private Menu mMenu;
+    private ProgressDialog mProgressDialog;
+
+    private SearchView searchView;
 
     private Book.BookRequestData mBookRequestData;
     private BookRequestDataAdapter mAdapter;
@@ -55,18 +66,23 @@ public class SearchBookFragment extends BaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        mProgressDialog = new ProgressDialog(getActivity());
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.show();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View contentView = inflater.inflate(R.layout.fragment_book_searched, container, false);
         ButterKnife.inject(this, contentView);
+        ((MainActivity) getActivity()).setOnDrawerListener(this);   //MainActivity中侧滑菜单的监听器
 
         setupAdapter();
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                String bookid = ((Book) parent.getItemAtPosition(position)).id;
+                Logger.i(TAG, "ID= " + bookid);
             }
         });
 
@@ -74,6 +90,7 @@ public class SearchBookFragment extends BaseFragment {
         loadData();
         return contentView;
     }
+
 
     private void setupAdapter() {
         if (getActivity() == null || mListView == null) {
@@ -96,6 +113,7 @@ public class SearchBookFragment extends BaseFragment {
     @Override
     public void loadData() {
         Logger.i(TAG, "LOADDATE");
+        setRefreshing(true);
         String query = PreferenceManager.getDefaultSharedPreferences(MyApp.getContext()).getString(MyApp.PREF_SEARCHQUERY, null);
         if (query != null) {
             String url = getActivity().getString(R.string.booksearch_host) + "?q=" + query.trim() + "&apikey=" + DoubanApi.douban_apiKey;
@@ -109,7 +127,6 @@ public class SearchBookFragment extends BaseFragment {
         return new Response.Listener<Book.BookRequestData>() {
             @Override
             public void onResponse(Book.BookRequestData bookRequestData) {
-                Logger.i(TAG, "TOTAL:" + bookRequestData.getTotal() + "\t" + bookRequestData.books.get(0).getDescription());
                 mBookRequestData = bookRequestData;
                 updateUI();
 
@@ -119,6 +136,7 @@ public class SearchBookFragment extends BaseFragment {
 
     private void updateUI() {
         setupAdapter();
+        setRefreshing(false);
     }
 
 
@@ -126,14 +144,18 @@ public class SearchBookFragment extends BaseFragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.search_book, menu);
+        mMenu = menu;
+        mRefreshItem = menu.findItem(R.id.action_refresh);
+
 
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.HONEYCOMB) {
 
             // Get the SearchView and set the searchable configuration
             SearchManager searchManager = (SearchManager) getActivity()
                     .getSystemService(Context.SEARCH_SERVICE);
-            SearchView searchView = (SearchView) menu
+            searchView = (SearchView) menu
                     .findItem(R.id.search_book).getActionView();
+
 
             // Assumes current activity is the searchable activity
             searchView.setSearchableInfo(searchManager
@@ -156,11 +178,41 @@ public class SearchBookFragment extends BaseFragment {
 
     }
 
+    /**
+     * MainActivity中侧菜单的监听器
+     */
+
+    @Override
+    public void onDrawerOpened() {
+        Logger.i(TAG, "onDrawerOpened");
+        MenuItem searchItem = mMenu.findItem(R.id.search_book);
+        if (searchItem != null && searchView != null) {
+            CommUtils.hideKeyboard(getActivity(), searchView.getWindowToken());
+            searchView.setVisibility(View.GONE);
+            searchItem.setVisible(false);
+
+        }
+    }
+
+    @Override
+    public void onDrawerClosed() {
+        Logger.i(TAG, "onDrawerClosed");
+        MenuItem searchItem = mMenu.findItem(R.id.search_book);
+        if (searchItem != null && searchView != null) {
+            Logger.i(TAG, "onDrawerClosed IN searchItem!=null");
+            searchItem.setVisible(true);
+            searchView.setVisibility(View.VISIBLE);
+        }
+    }
+
 
     private class BookRequestDataAdapter extends ArrayAdapter<Book> {
 
+        private ImageLoader imageLoader;
+
         public BookRequestDataAdapter(List<Book> books) {
             super(getActivity(), 0, books);
+            this.imageLoader = new ImageLoader(VolleyUtil.getQueue(MyApp.getContext()), new LruImageCache());
         }
 
         @Override
@@ -181,7 +233,22 @@ public class SearchBookFragment extends BaseFragment {
 //            Logger.i(TAG, "rating " + Float.parseFloat(book.rating.average));
 
             //异步加载图片
+            ImageLoader.ImageContainer container = null;
+            try {
+                //如果当前ImageView上存在请求，先取消
+                if (mHolder.imageView.getTag() != null) {
+                    container = (ImageLoader.ImageContainer) mHolder.imageView.getTag();
+                    container.cancelRequest();
+                }
 
+            } catch (Exception e) {
+            }
+
+            ImageLoader.ImageListener listener = ImageLoader.getImageListener(mHolder.imageView, R.drawable.book_image_default, R.drawable.book_image_default);
+            container = imageLoader.get(StringUtil.preUrl(book.image), listener);
+
+            //在ImageView上存储当前请求的Container，用于取消请求
+            mHolder.imageView.setTag(container);
 
             return convertView;
         }
@@ -210,6 +277,21 @@ public class SearchBookFragment extends BaseFragment {
                 ratingBar = (RatingBar) convertView.findViewById(R.id.ratingbar);
                 desc = (TextView) convertView.findViewById(R.id.book_description);
             }
+        }
+
+
+    }
+
+    private void setRefreshing(boolean refreshing) {
+
+        if (mRefreshItem == null) return;
+
+        if (refreshing) {
+            mRefreshItem.setActionView(R.layout.actionbar_refresh_progress);
+            mProgressDialog.show();
+        } else {
+            mRefreshItem.setActionView(null);
+            mProgressDialog.dismiss();
         }
 
 

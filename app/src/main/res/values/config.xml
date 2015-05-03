@@ -11,4 +11,5 @@
 
     <string name="userurl_host">https://api.douban.com/v2/user/</string>
     <string name="booksearch_host">https://api.douban.com/v2/book/search</string>
+    <string name="bookitem_host">https://api.douban.com/v2/book/</string>
 </resources>

@@ -53,6 +53,18 @@ public class MainActivity extends BaseActivity {
 
     private Menu mMenu;
 
+    private onDrawerListener mOnDrawerListener;
+
+    public void setOnDrawerListener(onDrawerListener onDrawerListener) {
+        mOnDrawerListener = onDrawerListener;
+    }
+
+    public interface onDrawerListener {
+        void onDrawerOpened();
+
+        void onDrawerClosed();
+    }
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -66,6 +78,11 @@ public class MainActivity extends BaseActivity {
                 super.onDrawerOpened(view);
                 setTitle(R.string.app_name);
                 mMenu.findItem(R.id.action_refresh).setVisible(false);
+
+                if (mOnDrawerListener!=null){
+                    mOnDrawerListener.onDrawerOpened();
+                }
+
             }
 
             @Override
@@ -74,13 +91,17 @@ public class MainActivity extends BaseActivity {
                 setTitle(mCategory.getDisplayName());
                 mMenu.findItem(R.id.action_refresh).setVisible(true);
 
+
                 blurImage.setVisibility(View.GONE);
                 blurImage.setImageBitmap(null);
+
+                if (mOnDrawerListener!=null){
+                    mOnDrawerListener.onDrawerClosed();
+                }
             }
         };
         mDrawerToggle.setBlurImageAndView(blurImage, contentLayout);
         mDrawerLayout.setDrawerListener(mDrawerToggle);
-
         setCategory(Category.newbook);
         replaceFragment(R.id.left_drawer, new DrawerFragment());
     }
@@ -198,7 +219,6 @@ public class MainActivity extends BaseActivity {
 
         }
     }
-
 
 
     @Override
