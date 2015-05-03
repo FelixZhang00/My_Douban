@@ -20,6 +20,7 @@ import felixzhang.project.my_douban.ui.fragment.BaseFragment;
 import felixzhang.project.my_douban.ui.fragment.DrawerFragment;
 import felixzhang.project.my_douban.ui.fragment.MyInfoFragment;
 import felixzhang.project.my_douban.ui.fragment.NewBookFragment;
+import felixzhang.project.my_douban.ui.fragment.SearchBookFragment;
 import felixzhang.project.my_douban.util.Logger;
 import felixzhang.project.my_douban.util.UserUtils;
 import felixzhang.project.my_douban.view.BlurFoldingActionBarToggle;
@@ -136,6 +137,9 @@ public class MainActivity extends BaseActivity {
                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                 startActivityForResult(intent, LOGIN_REQUEST_CODE);
             }
+        } else if (category.equals(Category.searchbook)) {   //进入图书搜索模块
+            mContentFragment = SearchBookFragment.newInstance();
+            replaceFragment(R.id.content_frame, mContentFragment);
         }
 
 //        mContentFragment = FeedsFragment.newInstance(category);
