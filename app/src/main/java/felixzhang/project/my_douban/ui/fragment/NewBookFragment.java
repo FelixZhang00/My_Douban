@@ -39,6 +39,8 @@ import felixzhang.project.my_douban.util.Logger;
 
 /**
  * Created by felix on 15/4/27.
+ * 单独的模块，从网页上爬数据
+ *
  */
 public class NewBookFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
     private static final String TAG = "NewBookFragment";
@@ -170,13 +172,13 @@ public class NewBookFragment extends BaseFragment implements SwipeRefreshLayout.
     @Override
     public void onRefresh() {
         if (isFirstRefresh) {
-            loadData();
+            loadFirstAndScrollToTop();
             isFirstRefresh = false;
         }
     }
 
     @Override
-    public void loadData() {
+    public void loadFirstAndScrollToTop() {
         if (isFirstRefresh || !mSwipeLayout.isRefreshing()) {  //刚刷新才加载数据 or 对于actionbar上的按钮来说。。。
             new FetchItemsTask().execute();
         }

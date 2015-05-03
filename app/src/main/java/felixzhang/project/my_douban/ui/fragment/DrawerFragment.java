@@ -50,7 +50,7 @@ public class DrawerFragment extends BaseFragment {
 
 
     @Override
-    public void loadData() {
+    public void loadFirstAndScrollToTop() {
 
     }
 }

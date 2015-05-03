@@ -102,8 +102,8 @@ public class MyInfoFragment extends BaseFragment implements SwipeRefreshLayout.O
         new FetchUserTask().execute(userID);
     }
 
-    @Override
-    public void loadData() {
+
+    public void loadFirstAndScrollToTop() {
         if (isFirstRefresh || !mSwipeLayout.isRefreshing()) {  //刚刷新才加载数据 or 对于actionbar上的按钮来说。。。
             updateUI();
         }
@@ -114,7 +114,7 @@ public class MyInfoFragment extends BaseFragment implements SwipeRefreshLayout.O
     @Override
     public void onRefresh() {
         if (isFirstRefresh) {
-            loadData();
+            loadFirstAndScrollToTop();
             isFirstRefresh = false;
         }
     }

@@ -137,7 +137,7 @@ public class MainActivity extends BaseActivity {
         }
         switch (item.getItemId()) {
             case R.id.action_refresh: //TODO
-                mContentFragment.loadData();
+                mContentFragment.loadFirstAndScrollToTop();
                 return true;
 
             default:
@@ -234,7 +234,7 @@ public class MainActivity extends BaseActivity {
             sp.edit().putString(MyApp.PREF_SEARCHQUERY, searchQuery).commit();
 
             SearchBookFragment searchBookFragment = (SearchBookFragment) getSupportFragmentManager().findFragmentById(R.id.content_frame);
-            searchBookFragment.loadData();
+            searchBookFragment.loadFirstAndScrollToTop();
         }
     }
 }

@@ -20,7 +20,7 @@ public abstract class BaseFragment extends Fragment {
 
     private static final String TAG = "BaseFragment";
 
-    public abstract void loadData();
+    public abstract void loadFirstAndScrollToTop();
 
     @Override
     public void onDestroy() {
