@@ -100,11 +100,17 @@ public class Book extends BaseModel {
         public String total;
 
         public int getTotal() {
-            return total;
+            return Integer.parseInt(total);
         }
+
+        public int getCount(){
+            return Integer.parseInt(count);
+        }
+        public int getStart(){
+            return Integer.parseInt(start);
+        }
+
     }
-
-
 
 
 }

@@ -18,10 +18,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
 
 import java.util.ArrayList;
 
@@ -38,6 +39,9 @@ import felixzhang.project.my_douban.ui.adapter.BookRequestDataAdapter;
 import felixzhang.project.my_douban.util.CommUtils;
 import felixzhang.project.my_douban.util.Logger;
 import felixzhang.project.my_douban.util.TaskUtil;
+import felixzhang.project.my_douban.view.LoadingFooter;
+import felixzhang.project.my_douban.view.OnLoadNextListener;
+import felixzhang.project.my_douban.view.PageListView;
 
 /**
  * Created by felix on 15/5/3.
@@ -46,8 +50,8 @@ public class SearchBookFragment extends BaseFragment implements MainActivity.onD
 
     private final String TAG = getClass().getSimpleName();
 
-    @InjectView(R.id.listview)
-    ListView mListView;
+    @InjectView(R.id.listView)
+    PageListView mListview;
 
     private MenuItem mRefreshItem;
     private Menu mMenu;
@@ -57,7 +61,8 @@ public class SearchBookFragment extends BaseFragment implements MainActivity.onD
 
     private BookRequestDataAdapter mAdapter;
 
-    private String mStart;    //分页查询的首位置
+    private String mStart = "0";    //分页查询的首位置
+    private int mTotal=0;  // 分页总个数
 
     private SearchedBookDataHelper mDataHelper;
 
@@ -80,27 +85,38 @@ public class SearchBookFragment extends BaseFragment implements MainActivity.onD
         ((MainActivity) getActivity()).setOnDrawerListener(this);   //MainActivity中侧滑菜单的监听器
 
 
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mDataHelper = new SearchedBookDataHelper(getActivity());
+        mAdapter = new BookRequestDataAdapter(getActivity());
+
+        View header = new View(getActivity());
+        mListview.addHeaderView(header);
+        mListview.setAdapter(mAdapter);
+        mListview.setLoadNextListener(new OnLoadNextListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String bookid = ((Book) parent.getItemAtPosition(position)).id;
-                Logger.i(TAG, "ID= " + bookid);
+            public void onLoadNext() {
+                loadNext();
             }
         });
-        mDataHelper = new SearchedBookDataHelper(getActivity());
-        mAdapter=new BookRequestDataAdapter()
+        mListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String imageUrl = mAdapter.getItem(position).image;
+                Logger.i(TAG, "imageUrl = " + imageUrl);
+            }
+        });
+
+
         getLoaderManager().initLoader(0, null, this);
         loadFirst();
         return contentView;
     }
 
 
-
-
     @Override
     public void loadFirstAndScrollToTop() {
         loadFirst();
     }
+
 
     /**
      * *******数据分页加载**********************************************
@@ -126,6 +142,7 @@ public class SearchBookFragment extends BaseFragment implements MainActivity.onD
 
         if (query != null) {
             String url = getActivity().getString(R.string.booksearch_host) + "?q=" + query.trim() + "&start=" + start + "&apikey=" + DoubanApi.douban_apiKey;
+            Logger.i(TAG, "url = " + url);
             executeRequest(new GsonRequest(url, Book.BookRequestData.class, responseListener(), errorListener()));
         } else {  //没有输入搜索关键字的情况
             setRefreshing(false);
@@ -147,18 +164,23 @@ public class SearchBookFragment extends BaseFragment implements MainActivity.onD
                         if (isRefreshFromTop) {
                             mDataHelper.deleteAll();
                         }
-                        mStart = response.start;
+                        mTotal=response.getTotal();
+                        mStart=response.getStart()+response.getCount()+"";
                         ArrayList<Book> books = response.books;
                         mDataHelper.bulkInsert(books);
                         return null;
                     }
-
                     @Override
                     protected void onPostExecute(Object o) {
                         super.onPostExecute(o);
-                        if (isRefreshFromTop){
+                        if (isRefreshFromTop) {
                             setRefreshing(false);
-                        }else{
+                        } else {
+                            if (Integer.parseInt(mStart)>=mTotal){
+                                mListview.setState(LoadingFooter.State.TheEnd);
+                            }else{
+                                mListview.setState(LoadingFooter.State.Idle);
+                            }
 
                         }
                     }
@@ -168,9 +190,20 @@ public class SearchBookFragment extends BaseFragment implements MainActivity.onD
         };
     }
 
-    /*************************************************************************/
+    protected Response.ErrorListener errorListener() {
+        return new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(MyApp.getContext(), R.string.loading_failed, Toast.LENGTH_SHORT).show();
+                setRefreshing(false);
+                mListview.setState(LoadingFooter.State.Idle, 3000);
+            }
+        };
+    }
 
-
+    /**
+     * *********************************************************************
+     */
 
 
     @Override
