@@ -15,6 +15,7 @@ import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 public class MyApp extends Application {
 
     public static final String PREFS_FILE="config";
+    public static final String PREF_SEARCHQUERY="searchQuery";
     private static Context sContext;
 
     @Override

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -13,7 +14,9 @@ import com.android.volley.VolleyError;
 import com.romainpiel.shimmer.Shimmer;
 import com.romainpiel.shimmer.ShimmerTextView;
 
+import felixzhang.project.my_douban.MyApp;
 import felixzhang.project.my_douban.R;
+import felixzhang.project.my_douban.engine.data.RequestManager;
 import felixzhang.project.my_douban.util.UserUtils;
 
 /**
@@ -62,8 +65,9 @@ public class BaseActivity extends FragmentActivity {
                 return true;
             case R.id.logout:
                 UserUtils.clearUser();
-                startActivity(new Intent(this,LoginActivity.class));
+                startActivity(new Intent(this, LoginActivity.class));
                 return true;
+
 
             default:
                 return super.onOptionsItemSelected(item);
@@ -74,18 +78,18 @@ public class BaseActivity extends FragmentActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-//        RequestManager.cancelAll(this);
+        RequestManager.cancelAll(this);
     }
 
     protected void executeRequest(Request<?> request) {
-//        RequestManager.addRequest(request, this);
+        RequestManager.addRequest(request, this);
     }
 
     protected Response.ErrorListener errorListener() {
         return new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-//                ToastUtils.showLong(error.getMessage());
+                Toast.makeText(MyApp.getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         };
     }

@@ -1,9 +1,12 @@
 package felixzhang.project.my_douban.ui;
 
+import android.app.SearchManager;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.view.Menu;
@@ -14,6 +17,7 @@ import android.widget.ImageView;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import felixzhang.project.my_douban.MyApp;
 import felixzhang.project.my_douban.R;
 import felixzhang.project.my_douban.model.Category;
 import felixzhang.project.my_douban.ui.fragment.BaseFragment;
@@ -28,7 +32,8 @@ import felixzhang.project.my_douban.view.FoldingDrawerLayout;
 
 
 public class MainActivity extends BaseActivity {
-    public static final int LOGIN_REQUEST_CODE = 0;
+    public static final int REQUEST_CODE_LOGIN = 0;
+    private static final int REQUEST_CODE_SEARCHBOOK = 1;
     private static final String TAG = "MainActivity";
 
     @InjectView(R.id.drawer_layout)
@@ -113,6 +118,7 @@ public class MainActivity extends BaseActivity {
             case R.id.action_refresh: //TODO
                 mContentFragment.loadData();
                 return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -135,7 +141,7 @@ public class MainActivity extends BaseActivity {
                 replaceFragment(R.id.content_frame, mContentFragment);
             } else {
                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                startActivityForResult(intent, LOGIN_REQUEST_CODE);
+                startActivityForResult(intent, REQUEST_CODE_LOGIN);
             }
         } else if (category.equals(Category.searchbook)) {   //进入图书搜索模块
             mContentFragment = SearchBookFragment.newInstance();
@@ -158,7 +164,7 @@ public class MainActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == LOGIN_REQUEST_CODE) {
+        if (requestCode == REQUEST_CODE_LOGIN) {
 
             if (resultCode == RESULT_OK) {
                 Logger.i(TAG, "用户已登录");
@@ -166,6 +172,9 @@ public class MainActivity extends BaseActivity {
             } else {
                 mCategory = Category.newbook;
             }
+            setCategoryForResult(mCategory);
+        } else if (requestCode == REQUEST_CODE_SEARCHBOOK) {
+            mCategory = Category.newbook;
             setCategoryForResult(mCategory);
         }
 
@@ -183,9 +192,29 @@ public class MainActivity extends BaseActivity {
                 replaceFragment(R.id.content_frame, mContentFragment);
             } else {
                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                startActivityForResult(intent, LOGIN_REQUEST_CODE);
+                startActivityForResult(intent, REQUEST_CODE_LOGIN);
             }
+        } else if (category.equals(Category.searchbook)) {
+
         }
     }
 
+
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String searchQuery = intent.getStringExtra(SearchManager.QUERY);
+            Logger.i(TAG, searchQuery);
+
+            //保存搜索信息
+            SharedPreferences sp = PreferenceManager
+                    .getDefaultSharedPreferences(getApplicationContext());
+            sp.edit().putString(MyApp.PREF_SEARCHQUERY, searchQuery).commit();
+
+            SearchBookFragment searchBookFragment = (SearchBookFragment) getSupportFragmentManager().findFragmentById(R.id.content_frame);
+            searchBookFragment.loadData();
+        }
+    }
 }

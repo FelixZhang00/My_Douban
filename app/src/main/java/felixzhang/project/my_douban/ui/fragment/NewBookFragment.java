@@ -32,7 +32,7 @@ import felixzhang.project.my_douban.engine.DoubanFetcher;
 import felixzhang.project.my_douban.engine.ThumbnailDownLoader;
 import felixzhang.project.my_douban.engine.cacheload.ImageLoader;
 import felixzhang.project.my_douban.model.NewBook;
-import felixzhang.project.my_douban.ui.BookDetailActivity;
+import felixzhang.project.my_douban.ui.NewBookDetailActivity;
 import felixzhang.project.my_douban.ui.adapter.CardsAnimationAdapter;
 import felixzhang.project.my_douban.util.Logger;
 
@@ -113,10 +113,10 @@ public class NewBookFragment extends BaseFragment implements SwipeRefreshLayout.
         mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), BookDetailActivity.class);
+                Intent intent = new Intent(getActivity(), NewBookDetailActivity.class);
                 NewBook newBook = mNewBooks.get(position);
                 Logger.i(TAG, newBook.getId());
-                intent.putExtra(BookDetailActivity.BOOKID, newBook.getId());
+                intent.putExtra(NewBookDetailActivity.BOOKID, newBook.getId());
                 getActivity().startActivity(intent);
             }
         });

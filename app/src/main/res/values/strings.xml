@@ -9,18 +9,21 @@
     <string name="menu_item_clearuser">登出</string>
     <string name="login_error">登录失败</string>
     <string name="login_success">登录成功</string>
-    
-    
+
+
     <string name="myinfo">我的资料</string>
     <string name="myread">我读..</string>
     <string name="mylook">我看..</string>
     <string name="mylisten">我听..</string>
     <string name="mynote">我的日记</string>
     <string name="new_books">新书</string>
-    
+
     <string name="link_text_auto_read"><a href="http://www.douban.com">赶紧去豆瓣网找找吧！</a></string>
     <string name="link_text_auto_note"><a href="http://www.douban.com">赶紧去豆瓣网写一篇吧！</a></string>
-    <string name="menu_item_flush">刷新</string>
+    <string name="menu_item_flush">刷新</string
+        >
+    <string name="book_search">搜索图书</string>
+    <string name="search_hint">搜索图书</string>
 
     <string name="menu_item_edit">修改日记</string>
     <string name="menu_item_delete">删除日记</string>

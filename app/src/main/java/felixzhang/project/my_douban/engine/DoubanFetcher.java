@@ -190,6 +190,7 @@ public class DoubanFetcher {
     }
 
 
+
     public List<NewBook> getNewBooks(Context context) throws Exception {
         DBHelper dbHelper = new DBHelper(context);
 

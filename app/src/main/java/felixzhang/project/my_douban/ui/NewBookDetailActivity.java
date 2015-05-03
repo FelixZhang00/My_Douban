@@ -21,7 +21,7 @@ import felixzhang.project.my_douban.util.Logger;
  * 根据intent中传递的书的id在数据库中查找
  * FIXME 这里的数据不全，想要更多的数据需要apikey，而且有访问限制
  */
-public class BookDetailActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener {
+public class NewBookDetailActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener {
 
     public static final String BOOKID = "mBookId";
     private static final String TAG = "BookDetailActivity";
@@ -103,7 +103,7 @@ public class BookDetailActivity extends BaseActivity implements SwipeRefreshLayo
             if (mSwipeLayout != null && !mSwipeLayout.isRefreshing()) {
                 mSwipeLayout.setRefreshing(true);
             }
-            return new NewBookLoader(BookDetailActivity.this, args.getString(BOOKID));
+            return new NewBookLoader(NewBookDetailActivity.this, args.getString(BOOKID));
         }
 
         @Override
