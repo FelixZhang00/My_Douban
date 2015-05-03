@@ -62,7 +62,8 @@ public class SearchBookFragment extends BaseFragment implements MainActivity.onD
     private BookRequestDataAdapter mAdapter;
 
     private String mStart = "0";    //分页查询的首位置
-    private int mTotal=0;  // 分页总个数
+    private int mTotal = 0;  // 分页总个数
+    private boolean isEnd = false;  //是否达到最后一条记录
 
     private SearchedBookDataHelper mDataHelper;
 
@@ -84,17 +85,18 @@ public class SearchBookFragment extends BaseFragment implements MainActivity.onD
         ButterKnife.inject(this, contentView);
         ((MainActivity) getActivity()).setOnDrawerListener(this);   //MainActivity中侧滑菜单的监听器
 
+        isEnd = false;
 
         mDataHelper = new SearchedBookDataHelper(getActivity());
         mAdapter = new BookRequestDataAdapter(getActivity());
 
-        View header = new View(getActivity());
-        mListview.addHeaderView(header);
         mListview.setAdapter(mAdapter);
         mListview.setLoadNextListener(new OnLoadNextListener() {
             @Override
             public void onLoadNext() {
-                loadNext();
+                if (!isEnd) {
+                    loadNext();
+                }
             }
         });
         mListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -117,6 +119,11 @@ public class SearchBookFragment extends BaseFragment implements MainActivity.onD
         loadFirst();
     }
 
+    public void updateQuery() {
+        isEnd = false;   //更新查询内容时要记得更新此变量
+        mListview.setState(LoadingFooter.State.Idle);
+        Logger.i(TAG,"isEnd "+isEnd);
+    }
 
     /**
      * *******数据分页加载**********************************************
@@ -164,21 +171,23 @@ public class SearchBookFragment extends BaseFragment implements MainActivity.onD
                         if (isRefreshFromTop) {
                             mDataHelper.deleteAll();
                         }
-                        mTotal=response.getTotal();
-                        mStart=response.getStart()+response.getCount()+"";
+                        mTotal = response.getTotal();
+                        mStart = response.getStart() + response.getCount() + "";
                         ArrayList<Book> books = response.books;
                         mDataHelper.bulkInsert(books);
                         return null;
                     }
+
                     @Override
                     protected void onPostExecute(Object o) {
                         super.onPostExecute(o);
                         if (isRefreshFromTop) {
                             setRefreshing(false);
                         } else {
-                            if (Integer.parseInt(mStart)>=mTotal){
+                            if (Integer.parseInt(mStart) >= mTotal) {
+                                isEnd = true;
                                 mListview.setState(LoadingFooter.State.TheEnd);
-                            }else{
+                            } else {
                                 mListview.setState(LoadingFooter.State.Idle);
                             }
 

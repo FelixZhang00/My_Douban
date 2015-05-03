@@ -234,6 +234,7 @@ public class MainActivity extends BaseActivity {
             sp.edit().putString(MyApp.PREF_SEARCHQUERY, searchQuery).commit();
 
             SearchBookFragment searchBookFragment = (SearchBookFragment) getSupportFragmentManager().findFragmentById(R.id.content_frame);
+            searchBookFragment.updateQuery();
             searchBookFragment.loadFirstAndScrollToTop();
         }
     }

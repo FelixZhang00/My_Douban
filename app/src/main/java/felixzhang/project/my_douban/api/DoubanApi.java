@@ -8,9 +8,9 @@ package felixzhang.project.my_douban.api;
  */
 public class DoubanApi {
 
-    public static final String douban_apiKey = "082e587080482c44188b095180d884cc";
-    public static final String douban_secret = "9710e6749a71c153";
-    public static final String douban_appname = "Demo_my_douban";
+    public static final String douban_apiKey = "0feec0d3e8a175f12fcc427bb9e461d3";
+    public static final String douban_secret = "b0c06f17f8244c18";
+    public static final String douban_appname = "my_douban_haha";
 
 
     /**
