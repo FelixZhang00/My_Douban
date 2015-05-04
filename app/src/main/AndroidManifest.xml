@@ -3,10 +3,10 @@
     package="felixzhang.project.my_douban"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
 
     <application
         android:name=".MyApp"
@@ -29,16 +29,18 @@
 
         <activity
             android:name=".ui.MainActivity"
-            android:launchMode="singleTop"
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            android:launchMode="singleTop">
             <intent-filter>
-                <action android:name="android.intent.action.SEARCH" />
+                <action android:name="android.intent.action.SEARCH"/>
             </intent-filter>
-            <meta-data android:name="android.app.searchable"
-                       android:resource="@xml/searchable"/>
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable"/>
         </activity>
 
-        <activity android:name=".ui.LoginActivity"
+        <activity
+            android:name=".ui.LoginActivity"
             android:theme="@style/AppTheme"
             >
         </activity>
@@ -50,9 +52,12 @@
         <activity android:name=".ui.SearchedBookDetailActivity">
 
         </activity>
+
+        <activity android:name=".ui.BookWebViewActivity"/>
+
         <provider
-            android:authorities="felixzhang.project.my_douban.provider"
             android:name=".dao.DataProvider"
+            android:authorities="felixzhang.project.my_douban.provider"
             android:exported="false"
             >
             <grant-uri-permission

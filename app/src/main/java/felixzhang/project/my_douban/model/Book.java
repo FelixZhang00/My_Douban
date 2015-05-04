@@ -26,6 +26,7 @@ public class Book extends BaseModel {
     public Rating rating;
     public String image;
     public Images images;
+    public String alt;
 
 
     //出版信息

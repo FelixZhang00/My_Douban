@@ -4,12 +4,15 @@ package felixzhang.project.my_douban.ui;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -63,7 +66,7 @@ public class SearchedBookDetailActivity extends BaseActivity implements LoaderMa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.book_detail2);
         ButterKnife.inject(this);
-
+        actionBar.setDisplayShowTitleEnabled(true);
         parseArgument();
 
 
@@ -78,7 +81,7 @@ public class SearchedBookDetailActivity extends BaseActivity implements LoaderMa
 //                BitmapDrawable bd = new BitmapDrawable(getResources(), thumbnail);
 //                imageview.setImageDrawable(bd);
 
-                if (thumbnail!=null){
+                if (thumbnail != null) {
                     imageview.setImageBitmap(thumbnail);
                 }
 
@@ -131,7 +134,7 @@ public class SearchedBookDetailActivity extends BaseActivity implements LoaderMa
 
         //检查是否有大图
         String imgurl = mBook.images.large;
-        Logger.i(TAG,"imgurl: "+imgurl);
+        Logger.i(TAG, "imgurl: " + imgurl);
         if (imgurl == null || "".equals(imgurl.trim())) {
         } else {
             mThumbnailDownLoader.queueThumbnail(parallaxImageView, mBook.images.large);
@@ -197,5 +200,25 @@ public class SearchedBookDetailActivity extends BaseActivity implements LoaderMa
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.book_detail, menu);
 
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_item_book_detail:
+                Logger.i(TAG,"CLICK ON  menu_item_book_detail");
+                Intent intent = new Intent(this, BookWebViewActivity.class);
+                intent.putExtra(BookWebViewActivity.EXTRA_BOOK_ALT,mBook.alt);
+                startActivity(intent);
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 }

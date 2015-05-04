@@ -20,4 +20,14 @@ public class CommUtils {
         mgr.hideSoftInputFromWindow(windowToken, 0);
     }
 
+    public static boolean isValidUrl(String urlstr) {
+        if (urlstr == null) return false;
+
+        if (urlstr.startsWith("http://") || urlstr.startsWith("https://")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }
