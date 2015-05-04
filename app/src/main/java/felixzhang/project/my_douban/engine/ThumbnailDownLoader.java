@@ -91,21 +91,27 @@ public class ThumbnailDownLoader<Token> extends HandlerThread {
         try {
             byte[] bytes = new DoubanFetcher().getUrlBytes(url); // 执行这步操作时会阻塞
 
-            final Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0,
-                    bytes.length);
-            Logger.i(TAG, "download thumbnail success.");
 
-            mResponseHandler.post(new Runnable() {
+            if (bytes == null || bytes.length <= 0) {   //防止网址并非对应图片
+            } else {
 
-                @Override
-                public void run() {
-                    if (requestMap.get(token) != url) {
-                        return;
+                final Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0,
+                        bytes.length);
+                Logger.i(TAG, "download thumbnail success.");
+
+
+                mResponseHandler.post(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        if (requestMap.get(token) != url) {
+                            return;
+                        }
+                        requestMap.remove(token);
+                        mListener.onThumbnailDownloaded(token, bitmap);
                     }
-                    requestMap.remove(token);
-                    mListener.onThumbnailDownloaded(token, bitmap);
-                }
-            });
+                });
+            }
 
         } catch (IOException e) {
             Logger.i(TAG, "download thumbnail failed!");

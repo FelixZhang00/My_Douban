@@ -78,8 +78,9 @@ public class SearchedBookDetailActivity extends BaseActivity implements LoaderMa
 //                BitmapDrawable bd = new BitmapDrawable(getResources(), thumbnail);
 //                imageview.setImageDrawable(bd);
 
-                imageview.setImageBitmap(thumbnail);
-//                mListView.invaildMaxHeight();
+                if (thumbnail!=null){
+                    imageview.setImageBitmap(thumbnail);
+                }
 
 
             }
@@ -128,8 +129,13 @@ public class SearchedBookDetailActivity extends BaseActivity implements LoaderMa
             }
         });
 
-
-        mThumbnailDownLoader.queueThumbnail(parallaxImageView, mBook.images.large);
+        //检查是否有大图
+        String imgurl = mBook.images.large;
+        Logger.i(TAG,"imgurl: "+imgurl);
+        if (imgurl == null || "".equals(imgurl.trim())) {
+        } else {
+            mThumbnailDownLoader.queueThumbnail(parallaxImageView, mBook.images.large);
+        }
     }
 
 
