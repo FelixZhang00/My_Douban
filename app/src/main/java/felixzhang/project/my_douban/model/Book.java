@@ -25,6 +25,8 @@ public class Book extends BaseModel {
     public String summary;
     public Rating rating;
     public String image;
+    public Images images;
+
 
     //出版信息
     public String publisher;
@@ -41,8 +43,11 @@ public class Book extends BaseModel {
         for (String a : author) {
             autors += a + divi;
         }
+        String pubdateCell = (this.pubdate == null || "".equals(this.pubdate.trim())) ? "" : (" /" + pubdate);
+        String publisherCell = (this.publisher == null || "".equals(this.publisher.trim())) ? "" : (" /" + publisher);
+        String priceCell = (this.price == null || "".equals(this.price.trim())) ? "" : (" /" + price);
 
-        this.description = autors + " /" + pubdate + " /" + publisher + " /" + price;
+        this.description = autors + pubdateCell + publisherCell + priceCell;
         return description;
     }
 
@@ -91,6 +96,16 @@ public class Book extends BaseModel {
 
 
     /**
+     * 大中小图片的地址
+     */
+    public class Images {
+        public String large;
+        public String medium;
+        public String small;
+
+    }
+
+    /**
      * 请求返回的json格式
      */
     public static class BookRequestData {
@@ -103,10 +118,11 @@ public class Book extends BaseModel {
             return Integer.parseInt(total);
         }
 
-        public int getCount(){
+        public int getCount() {
             return Integer.parseInt(count);
         }
-        public int getStart(){
+
+        public int getStart() {
             return Integer.parseInt(start);
         }
 

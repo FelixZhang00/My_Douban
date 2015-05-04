@@ -80,6 +80,11 @@ public class SearchedBookDataHelper extends BaseDataHelper {
 
     }
 
+
+    public CursorLoader getCursorLoader(String bookid){
+        return new CursorLoader(getContext(), getContentUri(), null, SearchedBookDBInfo.COLUMN_BOOKID+" =?", new String[]{bookid}, SearchedBookDBInfo._ID + "  ASC");
+    }
+
     /**
      * SearchedBook数据表信息
      */

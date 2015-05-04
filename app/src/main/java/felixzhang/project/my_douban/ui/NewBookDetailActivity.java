@@ -23,7 +23,7 @@ import felixzhang.project.my_douban.util.Logger;
  */
 public class NewBookDetailActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener {
 
-    public static final String BOOKID = "mBookId";
+    public static final String EXTRA_BOOKID = "felixzhang.project.my_douban.bookid";
     private static final String TAG = "BookDetailActivity";
     @InjectView(R.id.swipe_container)
     SwipeRefreshLayout mSwipeLayout;
@@ -62,12 +62,12 @@ public class NewBookDetailActivity extends BaseActivity implements SwipeRefreshL
     }
 
     private void fillData() {
-        mBookId = getIntent().getStringExtra(BOOKID);
+        mBookId = getIntent().getStringExtra(EXTRA_BOOKID);
 
         LoaderManager lm = getLoaderManager();
 
         Bundle bundle = new Bundle();
-        bundle.putString(BOOKID, mBookId);
+        bundle.putString(EXTRA_BOOKID, mBookId);
 
         lm.initLoader(0, bundle, mLoaderCallbacks);
 
@@ -80,7 +80,7 @@ public class NewBookDetailActivity extends BaseActivity implements SwipeRefreshL
         if (isFirstRefresh) {
             LoaderManager lm = getLoaderManager();
             Bundle bundle = new Bundle();
-            bundle.putString(BOOKID, mBookId);
+            bundle.putString(EXTRA_BOOKID, mBookId);
             lm.restartLoader(0, bundle, mLoaderCallbacks);
             isFirstRefresh = false;
         }
@@ -103,7 +103,7 @@ public class NewBookDetailActivity extends BaseActivity implements SwipeRefreshL
             if (mSwipeLayout != null && !mSwipeLayout.isRefreshing()) {
                 mSwipeLayout.setRefreshing(true);
             }
-            return new NewBookLoader(NewBookDetailActivity.this, args.getString(BOOKID));
+            return new NewBookLoader(NewBookDetailActivity.this, args.getString(EXTRA_BOOKID));
         }
 
         @Override

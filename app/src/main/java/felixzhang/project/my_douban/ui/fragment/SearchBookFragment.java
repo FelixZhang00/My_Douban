@@ -4,6 +4,7 @@ package felixzhang.project.my_douban.ui.fragment;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -35,6 +36,8 @@ import felixzhang.project.my_douban.dao.SearchedBookDataHelper;
 import felixzhang.project.my_douban.engine.data.GsonRequest;
 import felixzhang.project.my_douban.model.Book;
 import felixzhang.project.my_douban.ui.MainActivity;
+import felixzhang.project.my_douban.ui.NewBookDetailActivity;
+import felixzhang.project.my_douban.ui.SearchedBookDetailActivity;
 import felixzhang.project.my_douban.ui.adapter.BookRequestDataAdapter;
 import felixzhang.project.my_douban.util.CommUtils;
 import felixzhang.project.my_douban.util.Logger;
@@ -64,6 +67,7 @@ public class SearchBookFragment extends BaseFragment implements MainActivity.onD
     private String mStart = "0";    //分页查询的首位置
     private int mTotal = 0;  // 分页总个数
     private boolean isEnd = false;  //是否达到最后一条记录
+    private boolean isScrollToTop;  //是否滚到首页
 
     private SearchedBookDataHelper mDataHelper;
 
@@ -102,11 +106,14 @@ public class SearchBookFragment extends BaseFragment implements MainActivity.onD
         mListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String imageUrl = mAdapter.getItem(position).image;
-                Logger.i(TAG, "imageUrl = " + imageUrl);
+                String bookid = mAdapter.getItem(position).id;
+                Logger.i(TAG, "bookid = " + bookid);
+                Intent intent = new Intent(getActivity(), SearchedBookDetailActivity.class);
+                intent.putExtra(NewBookDetailActivity.EXTRA_BOOKID, bookid);
+                getActivity().startActivity(intent);
+
             }
         });
-
 
         getLoaderManager().initLoader(0, null, this);
         loadFirst();
@@ -117,12 +124,14 @@ public class SearchBookFragment extends BaseFragment implements MainActivity.onD
     @Override
     public void loadFirstAndScrollToTop() {
         loadFirst();
+        mListview.smoothScrollToPosition(0);
     }
 
     public void updateQuery() {
         isEnd = false;   //更新查询内容时要记得更新此变量
+        isScrollToTop = false;
         mListview.setState(LoadingFooter.State.Idle);
-        Logger.i(TAG,"isEnd "+isEnd);
+        Logger.i(TAG, "isEnd " + isEnd);
     }
 
     /**
@@ -131,6 +140,7 @@ public class SearchBookFragment extends BaseFragment implements MainActivity.onD
 
 
     private void loadFirst() {
+        Logger.i(TAG, "loadFirst");
         mStart = "0";
         loadData(mStart);
     }
@@ -140,7 +150,7 @@ public class SearchBookFragment extends BaseFragment implements MainActivity.onD
     }
 
     private void loadData(String start) {
-        Logger.i(TAG, "LOADDATE");
+        Logger.i(TAG, "loadData" + "START =  " + start);
         if ("0".equals(start)) {
             setRefreshing(true);
         }
@@ -161,15 +171,16 @@ public class SearchBookFragment extends BaseFragment implements MainActivity.onD
 
     private Response.Listener<Book.BookRequestData> responseListener() {
         Logger.i(TAG, "responseListener");
-        final boolean isRefreshFromTop = ("0".equals(mStart));
+        final boolean isLoadFirst = ("0".equals(mStart));
         return new Response.Listener<Book.BookRequestData>() {
             @Override
             public void onResponse(final Book.BookRequestData response) {
                 TaskUtil.executeAsyncTask(new AsyncTask<Object, Object, Object>() {
                     @Override
                     protected Object doInBackground(Object... params) {
-                        if (isRefreshFromTop) {
-                            mDataHelper.deleteAll();
+                        if (isLoadFirst) {
+                            int deletenum = mDataHelper.deleteAll();
+                            Logger.i(TAG, "deletenum = " + deletenum);
                         }
                         mTotal = response.getTotal();
                         mStart = response.getStart() + response.getCount() + "";
@@ -181,7 +192,7 @@ public class SearchBookFragment extends BaseFragment implements MainActivity.onD
                     @Override
                     protected void onPostExecute(Object o) {
                         super.onPostExecute(o);
-                        if (isRefreshFromTop) {
+                        if (isLoadFirst) {
                             setRefreshing(false);
                         } else {
                             if (Integer.parseInt(mStart) >= mTotal) {
@@ -312,13 +323,19 @@ public class SearchBookFragment extends BaseFragment implements MainActivity.onD
         Logger.i(TAG, "onLoadFinished");        //每当Loader对应的数据库发生变话时就会调用该方法。
         mAdapter.changeCursor(data);
         if (data != null && data.getCount() == 0) {
+            Logger.i(TAG, "data is empty");
             loadFirst();
+        } else if (data == null) {
+            Logger.i(TAG, "data is null");
+        } else {
+            Logger.i(TAG, "data have something" + data.getCount());
+
         }
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-
+        mAdapter.changeCursor(null);
     }
 
 

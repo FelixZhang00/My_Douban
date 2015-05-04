@@ -118,7 +118,7 @@ public class NewBookFragment extends BaseFragment implements SwipeRefreshLayout.
                 Intent intent = new Intent(getActivity(), NewBookDetailActivity.class);
                 NewBook newBook = mNewBooks.get(position);
                 Logger.i(TAG, newBook.getId());
-                intent.putExtra(NewBookDetailActivity.BOOKID, newBook.getId());
+                intent.putExtra(NewBookDetailActivity.EXTRA_BOOKID, newBook.getId());
                 getActivity().startActivity(intent);
             }
         });
