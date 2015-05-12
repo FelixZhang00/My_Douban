@@ -102,7 +102,7 @@ public class MainActivity extends BaseActivity {
         };
         mDrawerToggle.setBlurImageAndView(blurImage, contentLayout);
         mDrawerLayout.setDrawerListener(mDrawerToggle);
-        setCategory(Category.newbook);
+        setCategory(Category.myinfo);
         replaceFragment(R.id.left_drawer, new DrawerFragment());
     }
 

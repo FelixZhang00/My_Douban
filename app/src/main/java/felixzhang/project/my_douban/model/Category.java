@@ -6,7 +6,7 @@ package felixzhang.project.my_douban.model;
 public enum Category {
     // , myread("我读"),mynote("我的日记")
 
-    newbook("新书"), myinfo("我的资料"), searchbook("搜索图书");  //自动调用构造方法
+     myinfo("我的资料"),newbook("新书"), searchbook("搜索图书");  //自动调用构造方法
     private String mDisplayName;
 
     Category(String displayName) {
