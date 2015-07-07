@@ -75,6 +75,8 @@ public class SearchBookFragment extends BaseFragment implements MainActivity.onD
         return new SearchBookFragment();
     }
 
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
