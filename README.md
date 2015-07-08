@@ -9,6 +9,9 @@ REST客户端实践-豆瓣客户端
 ###2. Screenshot
 ![Screenshot](my_douban_演示.gif)
 
+###3. Demo Download
+[本地下载](https://github.com/FelixZhang00/My_Douban/blob/release/apk/my_douban.apk?raw=true)
+
 
 
 
